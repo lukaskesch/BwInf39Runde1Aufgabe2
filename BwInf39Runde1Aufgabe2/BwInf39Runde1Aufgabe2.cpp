@@ -1,23 +1,62 @@
+#include "BwInf39Runde1Aufgabe2.h"
 
 
+void print_user_greetings()
+{
+	cout << "Hello there!" << endl;
+	cout << "This programm will loop through all the given puzzels and print their solution." << endl;
+}
 
-// BwInf39Runde1Aufgabe2.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
+void read_input(int number)
+{
+	string file_name = "examples/puzzel";
+	file_name.append(to_string(number));
+	file_name.append(".txt");
+	cout << endl << "file: " << file_name << endl;
+	ifstream input_file_stream(file_name);
 
-#include <iostream>
+	string dummy;
+	getline(input_file_stream, dummy);
+	getline(input_file_stream, dummy);
+
+	int left, right, center;
+	string s_left, s_right, s_center;
+	for (int i = 0; i < 9; i++)
+	{
+		//Pieces.push_back(vector<piece>());
+		input_file_stream >> left;
+		input_file_stream >> right;
+		input_file_stream >> center;
+
+		Pieces[i].push_back(piece(left, right, center));
+		Pieces[i].push_back(piece(right, center, left));
+		Pieces[i].push_back(piece(center, left, right));
+	}
+}
+
+
+void print_solution()
+{
+
+}
+
+void cleanup()
+{
+
+}
 
 int main()
 {
-	std::cout << "Hello World!\n";
+	print_user_greetings();
+
+	for (int i = 0; i < number_of_tests; i++)
+	{
+		read_input(i);
+
+		print_solution();
+		cleanup();
+	}
+
+	return 0;
 }
 
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
