@@ -1,7 +1,6 @@
 #pragma once
 
-
-class piece
+struct piece
 {
 public:
 	int left;
@@ -9,6 +8,5 @@ public:
 	int center;
 	int id;
 public:
-	/*piece();*/
 	piece(int left, int right, int center, int id);
 };

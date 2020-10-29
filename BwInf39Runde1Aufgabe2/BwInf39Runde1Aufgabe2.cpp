@@ -22,7 +22,6 @@ void read_input(int number)
 	int left, right, center;
 	for (int i = 0; i < 9; i++)
 	{
-		//Pieces.push_back(vector<piece>());
 		input_file_stream >> left;
 		input_file_stream >> right;
 		input_file_stream >> center;
@@ -143,10 +142,10 @@ void print_solution()
 		return;
 	}
 
-	cout << "Index | Piece number | left, center, and right values" << endl;
+	cout << "Index | Piece number | left, right, and center values" << endl;
 	for (int i = 0; i < 9; i++)
 	{
-		cout << to_string(i) << " -> " << to_string((*Solution[i]).id / 10) << ": " << to_string((*Solution[i]).left) << " " << to_string((*Solution[i]).center) << " " << to_string((*Solution[i]).right) << endl;
+		cout << to_string(i) << " -> " << to_string((*Solution[i]).id / 10) << ": " << to_string((*Solution[i]).left) << " " << to_string((*Solution[i]).right) << " " << to_string((*Solution[i]).center) << endl;
 	}
 }
 
