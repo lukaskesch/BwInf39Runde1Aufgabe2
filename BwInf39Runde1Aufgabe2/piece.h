@@ -7,8 +7,8 @@ public:
 	int left;
 	int right;
 	int center;
-
+	int id;
 public:
 	/*piece();*/
-	piece(int left, int right, int center);
+	piece(int left, int right, int center, int id);
 };

@@ -20,7 +20,6 @@ void read_input(int number)
 	getline(input_file_stream, dummy);
 
 	int left, right, center;
-	string s_left, s_right, s_center;
 	for (int i = 0; i < 9; i++)
 	{
 		//Pieces.push_back(vector<piece>());
@@ -28,21 +27,141 @@ void read_input(int number)
 		input_file_stream >> right;
 		input_file_stream >> center;
 
-		Pieces[i].push_back(piece(left, right, center));
-		Pieces[i].push_back(piece(right, center, left));
-		Pieces[i].push_back(piece(center, left, right));
+		Pieces[i].push_back(piece(left, right, center, (i * 10 + 0)));
+		Pieces[i].push_back(piece(right, center, left, (i * 10 + 1)));
+		Pieces[i].push_back(piece(center, left, right, (i * 10 + 2)));
 	}
 }
 
+void solve(int index)
+{
+	index++;
+	bool valid_new_piece = check_new_piece(index - 1);
+	bool reached_end = index == 9;
+	if (found_solution)
+	{
+		return;
+	}
+	else if (!valid_new_piece)
+	{
+		return;
+	}
+	else if (reached_end)
+	{
+		save_solution();
+		found_solution = true;
+		return;
+	}
+
+	for (int i = 0; i < 9; i++)
+	{
+		bool piece_in_use = Pieces_in_use[i];
+		if (piece_in_use)
+		{
+			continue;
+		}
+		for (int j = 0; j < 3; j++)
+		{
+			Pieces_in_use[i] = true;
+			Puzzel[index] = &Pieces[i][j];
+			solve(index);
+			Pieces_in_use[i] = false;
+			Puzzel[index] = nullptr;
+		}
+	}
+}
+
+bool check_new_piece(int index)
+{
+	bool match;
+	switch (index)
+	{
+	case -1:
+		return true;
+	case 0:
+		return true;
+	case 1:
+		match = (*Puzzel[0]).right == -(*Puzzel[1]).right;
+		if (match)
+			return true;
+		break;
+	case 2:
+		match = (*Puzzel[1]).left == -(*Puzzel[2]).left;
+		if (match)
+			return true;
+		break;
+	case 3:
+		match = (*Puzzel[2]).right == -(*Puzzel[3]).right;
+		if (match)
+			return true;
+		break;
+	case 4:
+		match = (*Puzzel[3]).left == -(*Puzzel[4]).left;
+		if (match)
+			return true;
+		break;
+	case 5:
+		match = (*Puzzel[1]).center == -(*Puzzel[5]).center;
+		if (match)
+			return true;
+		break;
+	case 6:
+		match = (*Puzzel[5]).right == -(*Puzzel[6]).right;
+		if (match)
+			return true;
+		break;
+	case 7:
+		match = (*Puzzel[6]).left == -(*Puzzel[7]).left && (*Puzzel[3]).center == -(*Puzzel[7]).center;
+		if (match)
+			return true;
+		break;
+	case 8:
+		match = (*Puzzel[6]).center == -(*Puzzel[8]).center;
+		if (match)
+			return true;
+		break;
+	default:
+		return false;
+	}
+	return false;
+}
+
+void save_solution()
+{
+	for (int i = 0; i < 9; i++)
+	{
+		Solution[i] = Puzzel[i];
+	}
+}
 
 void print_solution()
 {
+	bool no_solution_found = Solution[0] == nullptr;
+	if (no_solution_found)
+	{
+		cout << "No solution has been found";
+		return;
+	}
 
+	cout << "Index | Piece number | left, center, and right values" << endl;
+	for (int i = 0; i < 9; i++)
+	{
+		cout << to_string(i) << " -> " << to_string((*Solution[i]).id / 10) << ": " << to_string((*Solution[i]).left) << " " << to_string((*Solution[i]).center) << " " << to_string((*Solution[i]).right) << endl;
+	}
 }
 
 void cleanup()
 {
+	found_solution = false;
 
+	for (int i = 0; i < 9; i++)
+	{
+		Pieces_in_use[i] = false;
+		Puzzel[i] = nullptr;
+		Solution[i] = nullptr;
+
+		Pieces[i].clear();
+	}
 }
 
 int main()
@@ -52,10 +171,13 @@ int main()
 	for (int i = 0; i < number_of_tests; i++)
 	{
 		read_input(i);
-
+		solve(-1);
 		print_solution();
 		cleanup();
 	}
+
+	string dummy;
+	cin >> dummy;
 
 	return 0;
 }
