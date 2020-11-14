@@ -4,7 +4,7 @@
 void print_user_greetings()
 {
 	cout << "Hello there!" << endl;
-	cout << "This programm will loop through all the given puzzels and print their solution." << endl;
+	cout << "This programm will loop through all the given puzzles and print their solution." << endl;
 }
 
 void read_input(int number)
@@ -135,6 +135,9 @@ void save_solution()
 
 void print_solution()
 {
+	chrono::duration<double> elapsed = finish_time - start_time;
+	cout << "Elapsed time: " << elapsed.count() << " s" << endl;
+
 	bool no_solution_found = Solution[0] == nullptr;
 	if (no_solution_found)
 	{
@@ -170,7 +173,11 @@ int main()
 	for (int i = 0; i < number_of_tests; i++)
 	{
 		read_input(i);
+
+		start_time = chrono::high_resolution_clock::now();
 		solve(-1);
+		finish_time = chrono::high_resolution_clock::now();
+
 		print_solution();
 		cleanup();
 	}
